@@ -12,12 +12,19 @@ const App = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [user, setUser] = useState(null);
-  const [loginFormVisible, setLoginFormVisible] = useState(false);
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
   }, []);
 
+  useEffect(() => {
+    const loggedinUserJSON = window.localStorage.getItem('loggedinBlogUser');
+
+    if (loggedinUserJSON) {
+      const user = JSON.parse(loggedinUserJSON);
+      setUser(user);
+    }
+  }, []);
   const messageHandler = (message, type) => {
     setMessage({ message, type });
     setTimeout(() => {
@@ -30,7 +37,7 @@ const App = () => {
     console.log('handlelogin');
     try {
       const user = await loginService.login({ username, password });
-      console.log('user');
+      window.localStorage.setItem('loggedinBlogUser', JSON.stringify(user));
       setUser(user);
       setUsername('');
       setPassword('');
@@ -41,6 +48,12 @@ const App = () => {
   // const addBlog = (blogObject) => {
   //   console.log(blogObject);
   // };
+
+  const handleLogout = async () => {
+    window.localStorage.clear();
+    setUser(null);
+  };
+
   return (
     <div>
       <Notification message={message} />
@@ -57,7 +70,11 @@ const App = () => {
       {/* {user !== null && <BlogForm createBlog={addBlog} />} */}
       {user && (
         <div>
-          <p>{`${user.name} logged in`}</p>
+          <p>
+            {`${user.name} logged in `}
+            <button onClick={handleLogout}>Logout</button>
+          </p>
+
           {blogs.map((blog) => (
             <Blog key={blog.id} blog={blog} />
           ))}
