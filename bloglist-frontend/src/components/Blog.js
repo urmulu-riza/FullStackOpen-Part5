@@ -18,7 +18,9 @@ const Blog = ({ blog }) => {
       </button>
       {visible && (
         <div>
-          <span>{blog.url}</span>
+          <a href={blog.url.includes('//') ? blog.url : `//${blog.url}`}>
+            {blog.url}
+          </a>
           <div>
             likes {blog.likes} <button onClick={addLike}>Like</button>
           </div>

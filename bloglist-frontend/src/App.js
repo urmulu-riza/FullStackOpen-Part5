@@ -61,7 +61,9 @@ const App = () => {
     blogFormRef.current.toggleVisibility();
     try {
       const newBlog = await blogService.create(blogObject);
-      setBlogs(blogs.concat(newBlog));
+      // setBlogs(blogs.concat(newBlog));
+      const blogs = await blogService.getAll();
+      setBlogs(blogs);
       messageHandler(
         `A new blog titled ${newBlog.title} by ${newBlog.author} added`,
         'success'
