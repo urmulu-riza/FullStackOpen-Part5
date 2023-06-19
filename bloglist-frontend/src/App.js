@@ -17,18 +17,15 @@ const App = () => {
   const blogFormRef = useRef();
 
   useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs));
-  }, []);
-
-  useEffect(() => {
     const loggedinUserJSON = window.localStorage.getItem('loggedinBlogUser');
-    const loggedUserBlogs = window.localStorage.getItem('userBlogs');
 
     if (loggedinUserJSON) {
       const user = JSON.parse(loggedinUserJSON);
       setUser(user);
       blogService.setToken(user.token);
-      setBlogs(JSON.parse(loggedUserBlogs));
+      blogService
+        .getAll()
+        .then((blogs) => setBlogs(blogs.sort((a, b) => b.likes - a.likes)));
     }
   }, []);
 
@@ -51,9 +48,6 @@ const App = () => {
       const filtered = blogList.filter(
         (blog) => blog.user.username === username
       );
-      // Set the filtered blogs in the local storage
-      window.localStorage.setItem('userBlogs', JSON.stringify(filtered));
-      // Display the filtered blogs
       setBlogs(filtered);
 
       setUsername('');
@@ -74,9 +68,7 @@ const App = () => {
     blogFormRef.current.toggleVisibility();
     try {
       const newBlog = await blogService.create(blogObject);
-      // setBlogs(blogs.concat(newBlog));
-      const blogs = await blogService.getAll();
-      setBlogs(blogs);
+      setBlogs(blogs.concat(newBlog));
       messageHandler(
         `A new blog titled ${newBlog.title} by ${newBlog.author} added`,
         'success'
