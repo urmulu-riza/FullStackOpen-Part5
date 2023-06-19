@@ -49,7 +49,6 @@ const App = () => {
         (blog) => blog.user.username === username
       );
       setBlogs(filtered);
-
       setUsername('');
       setPassword('');
       messageHandler(`Dear ${user.name}, Welcome!`, 'success');
