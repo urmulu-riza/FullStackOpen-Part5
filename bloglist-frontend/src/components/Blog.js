@@ -25,20 +25,25 @@ const Blog = ({ blog, updateBlog, deleteBlog, username }) => {
     updateBlog(updatedBlog);
   };
   return (
-    <div style={blogStyle}>
-      {blog.title} - author: {blog.author}
-      <button onClick={() => setVisible(!visible)}>
+    <div className="blog" style={blogStyle}>
+      <div className="title-author">
+        {blog.title} - author: {blog.author}
+      </div>
+      <button className="visiblity-btn" onClick={() => setVisible(!visible)}>
         {visible ? 'hide' : 'view'}
       </button>
       {visible && (
-        <div>
-          <a href={blog.url.includes('//') ? blog.url : `//${blog.url}`}>
+        <div className="more-details">
+          <a
+            className="url"
+            href={blog.url.includes('//') ? blog.url : `//${blog.url}`}
+          >
             {blog.url}
           </a>
-          <div>
+          <div className="likes">
             likes {blog.likes} <button onClick={addLike}>Like</button>
           </div>
-          {blog.user.username}
+          <div className="creator">{blog.user.username}</div>
           {blog.user.username === username && (
             <button onClick={() => deleteBlog(blog.id, blog)}>Remove</button>
           )}
