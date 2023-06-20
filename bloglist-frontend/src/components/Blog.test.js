@@ -46,3 +46,25 @@ test('clicking the view button shows details', async () => {
   expect(url).toBeDefined();
   expect(likes).toBeDefined();
 });
+
+test('clicking the like button twice calls the event handler prop twice', async () => {
+  const blog = {
+    title: "Taş Oğuz İç Oğuz'a Asi Olup Beyrek Vefatı",
+    author: 'Anonim',
+    likes: 100000000,
+    url: 'https://en.wikipedia.org/wiki/Book_of_Dede_Korkut',
+    user: {},
+  };
+
+  const user = userEvent.setup();
+  const updateBlog = jest.fn();
+
+  const { container } = render(<Blog blog={blog} updateBlog={updateBlog} />);
+  const viewButton = screen.getByText('view');
+  await user.click(viewButton);
+
+  const likeButton = screen.getByText('Like');
+  await user.click(likeButton);
+  await user.click(likeButton);
+  expect(updateBlog).toHaveBeenCalledTimes(2);
+});
