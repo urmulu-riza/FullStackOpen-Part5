@@ -22,4 +22,27 @@ test('renders title and author by default and not number of likes', async () => 
   const { container } = render(<Blog blog={blog} />);
   const likes = container.querySelector('.likes');
   expect(likes).toEqual(null);
+  const url = container.querySelector('.url');
+  expect(url).toEqual(null);
+});
+
+test('clicking the view button shows details', async () => {
+  const blog = {
+    title: "Taş Oğuz İç Oğuz'a Asi Olup Beyrek Vefatı",
+    author: 'Anonim',
+    likes: 100000000,
+    url: 'https://en.wikipedia.org/wiki/Book_of_Dede_Korkut',
+    user: {},
+  };
+
+  const user = userEvent.setup();
+  const { container } = render(<Blog blog={blog} />);
+
+  const view = screen.getByText('view');
+  await user.click(view);
+
+  const likes = container.querySelector('.likes');
+  const url = container.querySelector('.url');
+  expect(url).toBeDefined();
+  expect(likes).toBeDefined();
 });
