@@ -113,7 +113,7 @@ describe('Blog app', function () {
       cy.contains('rizabear blog - author: Rizabear').should('not.exist');
     });
 
-    it.only('blogs are in descending order by likes', function () {
+    it('blogs are in descending order by likes', function () {
       cy.get('.visiblity-btn').eq(1).click();
       cy.get('.like-btn').eq(0).click();
       cy.get('.visiblity-btn').eq(0).click();
