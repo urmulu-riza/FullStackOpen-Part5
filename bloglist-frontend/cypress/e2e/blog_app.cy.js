@@ -9,6 +9,12 @@ describe('Blog app', function () {
       password: 'rizaman',
     };
     cy.request('POST', 'http://localhost:3003/api/users/', user);
+    const user2 = {
+      name: 'rizabear',
+      username: 'rizabear',
+      password: 'rizabear',
+    };
+    cy.request('POST', 'http://localhost:3003/api/users/', user2);
     cy.visit('http://localhost:3000');
   });
   it('Login form is shown', function () {
@@ -29,7 +35,7 @@ describe('Blog app', function () {
       cy.get('.error').should('have.css', 'color', 'rgb(255, 0, 0)');
     });
   });
-  describe('When logged in', function () {
+  describe('When logged in like works', function () {
     beforeEach(function () {
       cy.request('POST', 'http://localhost:3003/api/login', {
         username: 'rizaman',
@@ -52,7 +58,7 @@ describe('Blog app', function () {
         'A new blog titled new blog created with Cypress by Anonim added'
       );
     });
-    it.only('blog can be liked', function () {
+    it('blog can be liked', function () {
       cy.createBlog({
         title: 'This blog post gets 1 like',
         author: 'Sunal',
@@ -60,12 +66,58 @@ describe('Blog app', function () {
       });
       cy.get('.visiblity-btn').click();
       cy.contains('likes 0');
-      cy.get('#like-btn').click();
+      cy.get('.like-btn').click();
       cy.contains('likes 1');
     });
   });
-});
 
-// User logged out.
-// Dear rizaman, Welcome!
-//
+  describe('When logged in only the post entry creator can delete it', function () {
+    beforeEach(function () {
+      cy.login({ username: 'rizaman', password: 'rizaman' });
+      cy.createBlog({
+        title: 'rizaman blog',
+        author: 'Rizaman',
+        url: 'www.riza.az',
+      });
+
+      cy.login({ username: 'rizabear', password: 'rizabear' });
+      cy.createBlog({
+        title: 'rizabear blog',
+        author: 'Rizabear',
+        url: 'www.rizabear.com.tr',
+      });
+    });
+
+    it('removing blogs', function () {
+      cy.contains('rizaman blog - author: Rizaman')
+        .parent()
+        .find('button')
+        .should('contain', 'view')
+        .click();
+      cy.contains('rizaman blog - author: Rizaman')
+        .parent()
+        .parent()
+        .find('button')
+        .should('not.contain', 'delete');
+
+      cy.contains('rizabear blog')
+        .parent()
+        .find('button')
+        .should('contain', 'view')
+        .click();
+      cy.contains('rizabear blog')
+        .parent()
+        .find('button')
+        .should('contain', 'Remove');
+      cy.get('.remove-btn').click();
+      cy.contains('rizabear blog - author: Rizabear').should('not.exist');
+    });
+
+    it.only('blogs are in descending order by likes', function () {
+      cy.get('.visiblity-btn').eq(1).click();
+      cy.get('.like-btn').eq(0).click();
+      cy.get('.visiblity-btn').eq(0).click();
+      cy.contains('likes 0');
+    });
+  });
+});
