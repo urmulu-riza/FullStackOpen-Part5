@@ -1,0 +1,10 @@
+
+PUT http://localhost:3001/api/blogs/6486d61e2865c6a38afef55b
+Content-Type: application/json
+
+{
+    "title":"Alp Arslan",
+    "likes":22,
+    "author":"riza",
+    "url":"asdasd.asd/sadas/da/sd/asd"
+}

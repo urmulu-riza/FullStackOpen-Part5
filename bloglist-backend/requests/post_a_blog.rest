@@ -1,0 +1,43 @@
+
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+
+{
+    "title":"AlpArslan",
+    "likes":22,
+    "author":"riza",
+    "url":"asdasd.asd/sadas/da/sd/asd"
+
+}
+###
+POST http://localhost:3001/api/users
+Content-Type: application/json
+
+{
+    "username":"rizaman",
+    "name":"rizaman",
+    "password":"rizaman"
+}
+###
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+
+{
+    "title":"Alpsd5Afrdfdffslan",
+    "likes":2,
+    "author":"rdfa",
+    "url":"sd.asd/sadas/da/sd/asd",
+    "userId":"648a8fa092a125c7b0122f9e"
+
+}
+### with token
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJpemFtYW4iLCJpZCI6IjY0OGE4ZmEwOTJhMTI1YzdiMDEyMmY5ZSIsImlhdCI6MTY4Njg0MDEzMCwiZXhwIjoxNjg2ODQzNzMwfQ.KogmZ7SiEUvqgroVVJpELYMg4mTJ7K-AnQj6mCGgHgg
+
+{
+    "title":"withtoken",
+    "likes":2,
+    "author":"rdfa",
+    "url":"token.da/sd/asd"
+}
