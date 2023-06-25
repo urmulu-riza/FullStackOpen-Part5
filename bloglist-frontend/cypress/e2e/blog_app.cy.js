@@ -21,7 +21,7 @@ describe('Blog app', function () {
       cy.contains('Login').click();
       cy.contains('Dear rizaman, Welcome!');
     });
-    it('user login fails', function () {
+    it('non-user login fails', function () {
       cy.get('input:first').type('rizaman');
       cy.get('input:last').type('wrong');
       cy.contains('Login').click();
@@ -31,22 +31,37 @@ describe('Blog app', function () {
   });
   describe('When logged in', function () {
     beforeEach(function () {
-      cy.get('input:first').type('rizaman');
-      cy.get('input:last').type('rizaman');
-      cy.contains('Login').click();
+      cy.request('POST', 'http://localhost:3003/api/login', {
+        username: 'rizaman',
+        password: 'rizaman',
+      }).then((response) => {
+        localStorage.setItem('loggedinBlogUser', JSON.stringify(response.body));
+      });
+      cy.visit('http://localhost:3000');
     });
-    it.only('A blog can be created', function () {
+
+    it('A blog can be created', function () {
       cy.contains('Create new blog').click();
       cy.get('#title').type('new blog created with Cypress');
       cy.get('#author').type('Anonim');
       cy.get('#url').type('www.google.com');
       cy.get('#create-btn').click();
       cy.contains('new blog created with Cypress - author: Anonim');
-
       cy.get('div.success').should(
         'contain',
         'A new blog titled new blog created with Cypress by Anonim added'
       );
+    });
+    it.only('blog can be liked', function () {
+      cy.createBlog({
+        title: 'This blog post gets 1 like',
+        author: 'Sunal',
+        url: 'www.likelikelike.az',
+      });
+      cy.get('.visiblity-btn').click();
+      cy.contains('likes 0');
+      cy.get('#like-btn').click();
+      cy.contains('likes 1');
     });
   });
 });
