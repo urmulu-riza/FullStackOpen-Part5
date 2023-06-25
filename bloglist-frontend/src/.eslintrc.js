@@ -1,11 +1,14 @@
+const cypress = require('cypress');
+
 /* eslint-env node */
 module.exports = {
   env: {
     browser: true,
     es6: true,
     'jest/globals': true,
+    'cypress/globals': true,
   },
-  extends: ['eslint:recommended', 'plugin:react/recommended', 'prettier'],
+  extends: ['eslint:recommended', 'plugin:react/recommended'],
   parserOptions: {
     ecmaFeatures: {
       jsx: true,
@@ -13,7 +16,7 @@ module.exports = {
     ecmaVersion: 2018,
     sourceType: 'module',
   },
-  plugins: ['react', 'jest', 'prettier'],
+  plugins: ['react', 'jest', 'cypress'],
   rules: {
     indent: ['error', 2],
     'linebreak-style': ['error', 'unix'],
