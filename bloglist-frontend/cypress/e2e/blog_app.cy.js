@@ -1,3 +1,5 @@
+import { func } from 'prop-types';
+
 describe('Blog app', function () {
   beforeEach(function () {
     cy.request('POST', 'http://localhost:3003/api/testing/reset');
@@ -25,6 +27,26 @@ describe('Blog app', function () {
       cy.contains('Login').click();
       cy.contains('Wrong Credentials');
       cy.get('.error').should('have.css', 'color', 'rgb(255, 0, 0)');
+    });
+  });
+  describe('When logged in', function () {
+    beforeEach(function () {
+      cy.get('input:first').type('rizaman');
+      cy.get('input:last').type('rizaman');
+      cy.contains('Login').click();
+    });
+    it.only('A blog can be created', function () {
+      cy.contains('Create new blog').click();
+      cy.get('#title').type('new blog created with Cypress');
+      cy.get('#author').type('Anonim');
+      cy.get('#url').type('www.google.com');
+      cy.get('#create-btn').click();
+      cy.contains('new blog created with Cypress - author: Anonim');
+
+      cy.get('div.success').should(
+        'contain',
+        'A new blog titled new blog created with Cypress by Anonim added'
+      );
     });
   });
 });
